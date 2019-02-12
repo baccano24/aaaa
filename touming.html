@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            div {
+                width: 600px;
+                height: 400px;
+                border: 5px solid lightcoral;
+                position: relative;
+                margin: 40px auto;
+            }
+
+            #ul li {
+                width: 600px;
+                height: 400px;
+                position: absolute;
+                opacity: 0;
+                transition: 2s;
+            }
+
+            #ul li img {
+                width: 600px;
+                height: 400px;
+            }
+
+            span {
+                position: absolute;
+                width: 41px;
+                height: 69px;
+                background: url(page.png);
+                top: 50%;
+                margin-top: -35px;
+            }
+
+            #ra {
+                right: 0;
+                background-position: -41.5px;
+            }
+
+            #page {
+                position: absolute;
+                padding: 3px 5px;
+                background: rgba(255, 255, 255, 0.8);
+                bottom: 20px;
+                border-radius: 10px;
+                left: 50%;
+                margin-left: -30px;
+            }
+
+            #page li {
+                width: 8px;
+                height: 8px;
+                background: #fff;
+                border-radius: 50%;
+                float: left;
+                margin-right: 5px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="box">
+            <ul id="ul">
+                <li style="opacity:1"><img src="1.jpg"></li>
+                <li><img src="2.jpg"></li>
+                <li><img src="3.jpg"></li>
+                <li><img src="4.jpg"></li>
+            </ul>
+            <span id="la"></span>
+            <span id="ra"></span>
+            <ul id="page">
+                <li style="background:orange"></li>
+                <li></li>
+                <li></li>
+                <li style="margin-right:0"></li>
+            </ul>
+        </div>
+        <script>
+            var lis = document.querySelectorAll("#ul li");
+            var ul = document.getElementById("ul");
+            var pre = document.getElementById("la");
+            var next = document.getElementById("ra");
+            var pages = document.querySelectorAll("#page li");
+            var box = document.getElementById("box");
+            var i = 0;
+            var timer=null;
+            autoPlay()
+            //  左右按钮  页码  页码颜色跟随  停止开启定时器
+            // 左右按钮
+            next.onclick = function () {
+                i++;
+                if (i >= 4) {
+                    i = 0;
+                }
+                for (var k = 0; k < lis.length; k++) {
+                    lis[k].style.opacity = 0;
+                    // lis[k].style.zIndex = -1;
+                }
+                lis[i].style.opacity = 1;
+                // lis[i].style.zIndex = 1;
+                // i 图片透明1  其他人0
+                pageCss()
+            }
+            pre.onclick = function () {
+                i--;
+                if (i <= -1) {
+                    i = 3;
+                }
+                for (var k = 0; k < lis.length; k++) {
+                    lis[k].style.opacity = 0;
+                }
+                lis[i].style.opacity = 1;
+                pageCss()
+            }
+            // 页码
+            for (let t = 0; t < pages.length; t++) {
+                pages[t].index = t;// 为了存储 页码对应的索引
+                pages[t].onclick = function () {
+                    // 为什么不能在click函数中使用t
+                    i = this.index;
+                    for (var k = 0; k < lis.length; k++) {
+                        lis[k].style.opacity = 0;
+                    }
+                    lis[i].style.opacity = 1;
+                    // 
+                    pageCss()
+                    // 清除所有人的颜色  当前的页码变色 
+                }
+            }
+            // 开启 停止
+            box.onmouseover=function(){
+                clearInterval(timer)
+            }
+            box.onmouseout=function(){
+                autoPlay()
+            }
+
+            // 定时器自动播放
+            function autoPlay(){
+                timer = setInterval(function () {
+                    i++;
+                    if (i >= 4) {
+                        i = 0;
+                    }
+                    //  opacity 1 其他消失
+                    for (var k = 0; k < lis.length; k++) {
+                        lis[k].style.opacity = 0;
+                    }
+                    lis[i].style.opacity = 1; // js直接赋值 瞬间实现
+                    pageCss()
+                }, 3000)
+            }
+            // 页码颜色跟随
+             function pageCss() {
+                    for (var t = 0; t < pages.length; t++) {
+                        pages[t].style.background = "#fff";
+                    }
+                    pages[i].style.background = "orange";
+                }
+
+            // display: none / block  转块  transition 不好用
+            // opacity
+            // 知乎 简书 牛客网 前端面试  前端面试经
+        </script>
+    </body>
+
+</html>

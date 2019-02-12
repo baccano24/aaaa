@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>轮播图结构</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            div {
+                width: 600px;
+                height: 400px;
+                border: 5px solid lightcoral;
+                overflow: hidden;
+                position: relative;
+                margin: 40px auto;
+            }
+
+            #ul {
+                width: 3000px;
+                position: absolute;
+                left: 0;
+            }
+
+            #ul li {
+                width: 600px;
+                height: 400px;
+            /*    float: left; */
+            }
+
+            #ul li img {
+                width: 600px;
+                height: 400px;
+            }
+
+            span {
+                position: absolute;
+                width: 41px;
+                height: 69px;
+                background: url(page.png);
+                top: 50%;
+                margin-top: -35px;
+            }
+
+            #ra {
+                right: 0;
+                background-position: -41.5px;
+            }
+
+            #page {
+                position: absolute;
+                padding: 3px 5px;
+                background: rgba(255, 255, 255, 0.8);
+                bottom: 20px;
+                border-radius: 10px;
+                left: 50%;
+                margin-left: -30px;
+            }
+
+            #page li {
+                width: 8px;
+                height: 8px;
+                background: #fff;
+                border-radius: 50%;
+                float: left;
+                margin-right: 5px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="box">
+            <ul id="ul">
+                <li><img src="1.jpg"></li>
+                <li><img src="2.jpg"></li>
+                <li><img src="3.jpg"></li>
+                <li><img src="4.jpg"></li>
+                <li><img src="1.jpg"></li>
+            </ul>
+            <span id="la"></span>
+            <span id="ra"></span>
+            <ul id="page">
+                <li style="background:orange"></li>
+                <li></li>
+                <li></li>
+                <li style="margin-right:0"></li>
+            </ul>
+        </div>
+        <script>
+            // 核心 改变ul的left  运动
+            var ul = document.getElementById("ul");
+            var pre = document.getElementById("la");
+            var next = document.getElementById("ra");
+            var pages = document.querySelectorAll("#page li");
+            var box = document.getElementById("box");
+
+            // 隔3s ul运动一次  
+            var i = 0;
+            var timer=null;
+            autoPlay();
+            // 左右按钮绑定事件
+            next.onclick = function () {
+                // 走下一张
+                i++;
+                if (i >= 5) {
+                    ul.style.top = "0px";
+                    i = 1;
+                }
+                move(ul, "down", -400 * i);
+                pageCss()
+            }
+            pre.onclick = function () {
+                i--;
+                if (i <= -1) {
+                    // 最后一张
+                    ul.style.top = "-1600px";
+                    i = 3;
+                }
+                move(ul, "up", -400 * i);
+                pageCss()
+            }
+            // 页码事件
+            for (var k = 0; k < pages.length; k++) {
+                pages[k].index = k;
+                pages[k].onclick = function () {
+                    // 向左向右?
+                    // 跳转页码 和 当前所在的页码
+                    if (this.index > i) {
+                        move(ul, "down", -400 * this.index)
+                    } else {
+                        move(ul, "up", -400 * this.index)
+                    }
+                    i = this.index;
+                    // 页码跟随变色
+                    // 清空所有页码的颜色  当前页码颜色高亮
+                    pageCss()
+                }
+            }
+            // 定时器停止和开启
+            box.onmouseover=function(){
+                clearInterval(timer)
+            }
+            box.onmouseout=function(){
+                autoPlay()
+            }
+
+            // 开启定时器
+            function autoPlay(){
+                timer = setInterval(function () {
+                    i++;
+                    if (i >= 5) {
+                        ul.style.top = "0px";// 让ul 回到初始位置
+                        i = 1;                // 第一张 第二张
+                    }
+                    move(ul, "down", -400 * i);
+                    pageCss()
+                }, 3000)
+            }
+
+
+            // 页码跟随变色 i   
+            function pageCss() {
+                for (var t = 0; t < pages.length; t++) {
+                    pages[t].style.background = "#fff";
+                }
+                pages[i === 4 ? 0 : i].style.background = "orange";
+            }
+
+            // 物体运动函数
+            function move(ele, dir, end) {
+                clearInterval(ele.timer)
+                // 如果向左  如果向右
+                if (dir === "down") {
+                    ele.timer = setInterval(function () {
+                        ele.style.top = ele.offsetTop - 30 + "px";
+                        if (ele.offsetTop <= end) {
+                            clearInterval(ele.timer);
+                            ele.style.top = end + "px";
+                        }
+                    })
+                } else {
+                    ele.timer = setInterval(function () {
+                        ele.style.top = ele.offsetLeft + 30 + "px";
+                        if (ele.offsetTop >= end) {
+                            clearInterval(ele.timer);
+                            ele.style.top = end + "px";
+                        }
+                    });
+                }
+            }
+
+
+            // 看到的 图片静止的时间
+            // 3s- ul运动结束的时间
+        </script>
+    </body>
+
+</html>

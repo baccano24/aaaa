@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			#box{
+				width: 150px;
+				height: 204px;
+				border: 1px solid #000;
+				margin: 50px auto;
+				overflow: hidden;
+				position: relative;
+				
+			}
+			ul{
+				position: absolute;
+				width: 100%;
+				transition: all 0.5s;
+			}
+			#ul li{
+				border-bottom: 1px dotted #999;
+				font-size: 16px;
+				line-height: 33px;
+				text-align: center;
+				width: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul id="ul">
+				<li style="height: 33px;">太平洋游戏网</li>
+				<li style="height: 33px;">小发皮号</li>
+				<li style="height: 33px;">游侠网页游戏</li>
+				<li style="height: 33px;">巴士三国杀</li>
+				<li style="height: 33px;">40407</li>
+				<li style="height: 33px;">游戏狗三国杀</li>
+				<li style="height: 33px;">全球电竞新游频道</li>
+				<li style="height: 33px;">狼人杀社区</li>
+				<li style="height: 33px;">战旗直播</li>
+				<li style="height: 33px;">多游开服网</li>
+				<li style="height: 33px;">桌游圈</li>
+				<li style="height: 33px;">07073游戏网</li>
+				<li style="height: 33px;">NBOPEN</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			var ul = document.getElementById("ul");
+			var box = document.getElementById("box");
+			var li=document.getElementsByTagName("li")
+			
+			 // 隔3s ul运动一次  
+            var i = 0;
+            var timer = null;
+            autoPlay();
+			
+			// 定时器停止和开启
+            box.onmouseover = function () {
+                clearInterval(timer)
+            }
+            box.onmouseout = function () {
+                autoPlay()
+            }
+			
+			// 开启定时器
+            function autoPlay() {
+                timer = setInterval(function () {
+                    i++;
+                    if (i >= 8) {
+                        ul.style.top = "0px";// 让ul 回到初始位置
+                        i = 0;                // 第一张 第二张
+                    }
+                    move(ul, "top", -34 * i);
+                    
+                }, 2000)
+            }
+			
+            // 物体运动函数
+           function move(ele, dir, end) {
+                clearInterval(ele.timer)
+                if (dir === "top") {
+                    ele.timer = setInterval(function () {
+                        ele.style.top = ele.offsetTop - 30 + "px";
+                        if (ele.offsetTop <= end) {
+                            clearInterval(ele.timer);
+                            ele.style.top = end + "px";
+                        }
+                    })
+                } else {
+                    ele.timer = setInterval(function () {
+                        ele.style.top = ele.offsetTop + 30 + "px";
+                        if (ele.offsetTop >= end) {
+                            clearInterval(ele.timer);
+                            ele.style.top = end + "px";
+                        }
+                    });
+                }
+            }
+
+		</script>
+	</body>
+</html>
